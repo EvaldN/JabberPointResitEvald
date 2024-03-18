@@ -29,16 +29,13 @@ public class SlideViewerComponent extends JComponent {
 
 	private static final Color BGCOLOR = Color.white;
 	private static final Color COLOR = Color.black;
-	private static final String FONTNAME = "Dialog";
-	private static final int FONTSTYLE = Font.BOLD;
-	private static final int FONTHEIGHT = 10;
 	private static final int XPOS = 1100;
 	private static final int YPOS = 20;
 
 	public SlideViewerComponent(Presentation pres, JFrame frame) {
 		setBackground(BGCOLOR);
 		presentation = pres;
-		labelFont = new Font(FONTNAME, FONTSTYLE, FONTHEIGHT);
+		labelFont = new LabelFont().createFont();
 		this.frame = frame;
 
 		// Register itself as an observer
