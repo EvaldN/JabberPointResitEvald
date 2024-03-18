@@ -102,7 +102,4 @@ public class Presentation {
 		}
 	}
 
-	public void exit(int n) {
-		System.exit(n);
-	}
 }

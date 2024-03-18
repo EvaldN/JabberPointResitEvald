@@ -47,7 +47,7 @@ public class MenuController extends MenuBar {
 		fileMenu.add(createMenuItem(NEW, e -> clearPresentation()));
 		fileMenu.add(createMenuItem(SAVE, e -> savePresentation()));
 		fileMenu.addSeparator();
-		fileMenu.add(createMenuItem(EXIT, e -> presentation.exit(0)));
+		fileMenu.add(createMenuItem(EXIT, e -> System.exit(0)));
 		return fileMenu;
 	}
 
