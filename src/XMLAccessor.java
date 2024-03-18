@@ -53,92 +53,103 @@ public class XMLAccessor extends Accessor {
 	}
 
 	public void loadFile(Presentation presentation, String filename) throws IOException {
-		int slideNumber, itemNumber, max = 0, maxItems = 0;
 		try {
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document document = builder.parse(new File(filename)); // Create a JDOM document
-			Element doc = document.getDocumentElement();
-			presentation.setTitle(getTitle(doc, SHOWTITLE));
+			Document document = builder.parse(new File(filename));
+			Element docElement = document.getDocumentElement();
+			presentation.setTitle(getTitle(docElement, SHOWTITLE));
+			loadSlides(presentation, docElement);
+		} catch (ParserConfigurationException | SAXException e) {
+			throw new IOException(PCE, e);
+		}
+	}
 
-			NodeList slides = doc.getElementsByTagName(SLIDE);
-			max = slides.getLength();
-			for (slideNumber = 0; slideNumber < max; slideNumber++) {
-				Element xmlSlide = (Element) slides.item(slideNumber);
-				Slide slide = new Slide();
-				slide.setTitle(getTitle(xmlSlide, SLIDETITLE));
-				presentation.append(slide);
+	private void loadSlides(Presentation presentation, Element docElement) {
+		NodeList slides = docElement.getElementsByTagName(SLIDE);
+		for (int slideNumber = 0; slideNumber < slides.getLength(); slideNumber++) {
+			Element slideElement = (Element) slides.item(slideNumber);
+			Slide slide = createSlide(slideElement);
+			presentation.append(slide);
+			loadSlideItems(slide, slideElement);
+		}
+	}
 
-				NodeList slideItems = xmlSlide.getElementsByTagName(ITEM);
-				maxItems = slideItems.getLength();
-				for (itemNumber = 0; itemNumber < maxItems; itemNumber++) {
-					Element item = (Element) slideItems.item(itemNumber);
-					loadSlideItem(slide, item);
-				}
-			}
-		} catch (IOException iox) {
-			System.err.println(iox.toString());
-		} catch (SAXException sax) {
-			System.err.println(sax.getMessage());
-		} catch (ParserConfigurationException pcx) {
-			System.err.println(PCE);
+	private Slide createSlide(Element slideElement) {
+		Slide slide = new Slide();
+		slide.setTitle(getTitle(slideElement, SLIDETITLE));
+		return slide;
+	}
+
+	private void loadSlideItems(Slide slide, Element slideElement) {
+		NodeList slideItems = slideElement.getElementsByTagName(ITEM);
+		for (int itemNumber = 0; itemNumber < slideItems.getLength(); itemNumber++) {
+			Element item = (Element) slideItems.item(itemNumber);
+			loadSlideItem(slide, item);
 		}
 	}
 
 	protected void loadSlideItem(Slide slide, Element item) {
-		int level = 1; // default
-		NamedNodeMap attributes = item.getAttributes();
-		String leveltext = attributes.getNamedItem(LEVEL).getTextContent();
-		if (leveltext != null) {
-			try {
-				level = Integer.parseInt(leveltext);
-			} catch (NumberFormatException x) {
-				System.err.println(NFE);
-			}
-		}
-		String type = attributes.getNamedItem(KIND).getTextContent();
+		int level = parseLevel(item);
+		String type = item.getAttribute(KIND);
 		if (TEXT.equals(type)) {
 			slide.append(new TextItem(level, item.getTextContent()));
+		} else if (IMAGE.equals(type)) {
+			slide.append(new BitmapItem(level, item.getTextContent()));
 		} else {
-			if (IMAGE.equals(type)) {
-				slide.append(new BitmapItem(level, item.getTextContent()));
-			} else {
-				System.err.println(UNKNOWNTYPE);
-			}
+			System.err.println(UNKNOWNTYPE);
 		}
 	}
 
+	private int parseLevel(Element item) {
+		int level = 1; // default
+		String leveltext = item.getAttribute(LEVEL);
+		if (!leveltext.isEmpty()) {
+			try {
+				level = Integer.parseInt(leveltext);
+			} catch (NumberFormatException e) {
+				System.err.println(NFE);
+			}
+		}
+		return level;
+	}
+
 	public void saveFile(Presentation presentation, String filename) throws IOException {
-		PrintWriter out = new PrintWriter(new FileWriter(filename));
-		out.println("<?xml version=\"1.0\"?>");
-		out.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
-		out.println("<presentation>");
-		out.print("<showtitle>");
-		out.print(presentation.getTitle());
-		out.println("</showtitle>");
+		try (PrintWriter out = new PrintWriter(new FileWriter(filename))) {
+			out.println("<?xml version=\"1.0\"?>");
+			out.println("<!DOCTYPE presentation SYSTEM \"jabberpoint.dtd\">");
+			out.println("<presentation>");
+			out.print("<showtitle>");
+			out.print(presentation.getTitle());
+			out.println("</showtitle>");
+			saveSlides(presentation, out);
+			out.println("</presentation>");
+		}
+	}
+
+	private void saveSlides(Presentation presentation, PrintWriter out) {
 		for (int slideNumber = 0; slideNumber < presentation.getSize(); slideNumber++) {
 			Slide slide = presentation.getSlide(slideNumber);
 			out.println("<slide>");
 			out.println("<title>" + slide.getTitle() + "</title>");
-			Vector<SlideItem> slideItems = slide.getSlideItems();
-			for (int itemNumber = 0; itemNumber < slideItems.size(); itemNumber++) {
-				SlideItem slideItem = (SlideItem) slideItems.elementAt(itemNumber);
-				out.print("<item kind=");
-				if (slideItem instanceof TextItem) {
-					out.print("\"text\" level=\"" + slideItem.getLevel() + "\">");
-					out.print(((TextItem) slideItem).getText());
-				} else {
-					if (slideItem instanceof BitmapItem) {
-						out.print("\"image\" level=\"" + slideItem.getLevel() + "\">");
-						out.print(((BitmapItem) slideItem).getName());
-					} else {
-						System.out.println("Ignoring " + slideItem);
-					}
-				}
-				out.println("</item>");
-			}
+			saveSlideItems(slide, out);
 			out.println("</slide>");
 		}
-		out.println("</presentation>");
-		out.close();
+	}
+
+	private void saveSlideItems(Slide slide, PrintWriter out) {
+		Vector<SlideItem> slideItems = slide.getSlideItems();
+		for (SlideItem slideItem : slideItems) {
+			out.print("<item kind=");
+			if (slideItem instanceof TextItem) {
+				out.print("\"text\" level=\"" + slideItem.getLevel() + "\">");
+				out.print(((TextItem) slideItem).getText());
+			} else if (slideItem instanceof BitmapItem) {
+				out.print("\"image\" level=\"" + slideItem.getLevel() + "\">");
+				out.print(((BitmapItem) slideItem).getName());
+			} else {
+				System.out.println("Ignoring " + slideItem);
+			}
+			out.println("</item>");
+		}
 	}
 }
