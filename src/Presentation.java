@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 
-
 /**
  * <p>Presentations keeps track of the slides in a presentation.</p>
  * <p>Only one instance of this class is available.</p>
@@ -13,21 +12,17 @@ import java.util.ArrayList;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 
+
 public class Presentation {
 	private String showTitle; //The title of the presentation
 	private ArrayList<Slide> showList = null; //An ArrayList with slides
 	private int currentSlideNumber = 0; //The number of the current slide
-	private SlideViewerComponent slideViewComponent = null; //The view component of the slides
+	private ArrayList<SlideViewerComponent> observers = new ArrayList<>(); // List of observers
 
 	public Presentation() {
-		slideViewComponent = null;
 		clear();
 	}
 
-	public Presentation(SlideViewerComponent slideViewerComponent) {
-		this.slideViewComponent = slideViewerComponent;
-		clear();
-	}
 
 	public int getSize() {
 		return showList.size();
@@ -41,28 +36,22 @@ public class Presentation {
 		showTitle = nt;
 	}
 
-	public void setShowView(SlideViewerComponent slideViewerComponent) {
-		this.slideViewComponent = slideViewerComponent;
-	}
-
 	//Returns the number of the current slide
 	public int getSlideNumber() {
 		return currentSlideNumber;
 	}
 
-	//Change the current slide number and report it the the window
+	//Change the current slide number and report it the window
 	public void setSlideNumber(int number) {
 		currentSlideNumber = number;
-		if (slideViewComponent != null) {
-			slideViewComponent.update(this, getCurrentSlide());
-		}
+		notifyObservers(); // Notify observers about the change
 	}
 
 	//Navigate to the previous slide unless we are at the first slide
 	public void prevSlide() {
 		if (currentSlideNumber > 0) {
 			setSlideNumber(currentSlideNumber - 1);
-	    }
+		}
 	}
 
 	//Navigate to the next slide unless we are at the last slide
@@ -87,13 +76,30 @@ public class Presentation {
 	public Slide getSlide(int number) {
 		if (number < 0 || number >= getSize()){
 			return null;
-	    }
-			return (Slide)showList.get(number);
+		}
+		return (Slide)showList.get(number);
 	}
 
 	//Return the current slide
 	public Slide getCurrentSlide() {
 		return getSlide(currentSlideNumber);
+	}
+
+	// Register an observer
+	public void attachObserver(SlideViewerComponent observer) {
+		observers.add(observer);
+	}
+
+	// Remove an observer
+	public void detachObserver(SlideViewerComponent observer) {
+		observers.remove(observer);
+	}
+
+	// Notify the observer about the change
+	private void notifyObservers() {
+		for (SlideViewerComponent observer : observers) {
+			observer.update(this, getCurrentSlide());
+		}
 	}
 
 	public void exit(int n) {
