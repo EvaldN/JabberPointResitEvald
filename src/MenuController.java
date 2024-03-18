@@ -110,7 +110,13 @@ public class MenuController extends MenuBar {
 			public void actionPerformed(ActionEvent actionEvent) {
 				String pageNumberStr = JOptionPane.showInputDialog((Object)PAGENR);
 				int pageNumber = Integer.parseInt(pageNumberStr);
-				presentation.setSlideNumber(pageNumber - 1);
+				if(pageNumber > 0 && pageNumber <= presentation.getSize()) {
+					presentation.setSlideNumber(pageNumber - 1);
+				}
+				else {
+					JOptionPane.showMessageDialog(parent, "Page number does not exist within the presentation",
+							"Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 		add(viewMenu);
