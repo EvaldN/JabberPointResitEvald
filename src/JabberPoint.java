@@ -21,6 +21,8 @@ public class JabberPoint {
 	protected static final String JABERR = "Jabberpoint Error ";
 	protected static final String JABVERSION = "Jabberpoint 1.6 - OU version";
 
+	protected static final String DEMO_PRESENTATION = "demoPresentation.xml";
+
 	/** The main program */
 	public static void main(String[] argv) {
 		
@@ -29,7 +31,7 @@ public class JabberPoint {
 		new SlideViewerFrame(JABVERSION, presentation);
 		try {
 			if (argv.length == 0) { //a demo presentation
-				Accessor.getDemoAccessor().loadFile(presentation, "");
+				new XMLAccessor().loadFile(presentation, DEMO_PRESENTATION);
 			} else {
 				new XMLAccessor().loadFile(presentation, argv[0]);
 			}
