@@ -26,9 +26,6 @@ public class AboutBox {
 			"University of the Netherlands, 2002 -- now.\n" +
 			"Author's version available from http://www.darwinsys.com/";
 	public static void show(Frame parent) {
-		JOptionPane.showMessageDialog(parent, ABOUT_MESSAGE,
-				ABOUT_TITLE,
-				JOptionPane.INFORMATION_MESSAGE
-		);
+		JOptionPane.showMessageDialog(parent, ABOUT_MESSAGE, ABOUT_TITLE, JOptionPane.INFORMATION_MESSAGE);
 	}
 }
