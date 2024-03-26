@@ -1,3 +1,9 @@
+package jabberpoint.slide_components;
+
+import jabberpoint.ui_components.KeyController;
+import jabberpoint.ui_components.MenuController;
+import jabberpoint.ui_components.Presentation;
+
 import java.awt.Dimension;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowAdapter;

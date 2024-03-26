@@ -1,10 +1,12 @@
+package jabberpoint.slide_components;
+
 import java.awt.Color;
 import java.awt.Font;
 
 /**
- * <p>Style stands for Indent, Color, Font and Leading.</p>
+ * <p>jabberpoint.slide_components.Style stands for Indent, Color, Font and Leading.</p>
  * <p>The link between a style number and an item level is hard-linked:
- * in Slide, the style is grabbed for an item
+ * in jabberpoint.slide_components.Slide, the style is grabbed for an item
  * with a style number the same as the item level.</p>
  *
  * @author Ian F. Darwin
@@ -21,11 +23,11 @@ public class Style {
 	private static Style[] styles; // the styles
 
 	private static final String FONTNAME = "Helvetica";
-	int indent;
-	Color color;
+	public int indent;
+	public Color color;
 	Font font;
 	int fontSize;
-	int leading;
+	public int leading;
 
 	public static void createStyles() {
 		styles = new Style[5];

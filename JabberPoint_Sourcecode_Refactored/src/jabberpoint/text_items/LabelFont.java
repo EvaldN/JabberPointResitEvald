@@ -1,3 +1,5 @@
+package jabberpoint.text_items;
+
 import java.awt.*;
 
 public class LabelFont {

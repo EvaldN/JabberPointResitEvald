@@ -1,3 +1,5 @@
+package jabberpoint.slide_components;
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.image.ImageObserver;
@@ -17,7 +19,7 @@ import java.awt.image.ImageObserver;
  * @version 1.6 2014/05/16 Sylvia Stuurman
  */
 public abstract class SlideItem {
-	private int level = 0; // The level of the SlideItem
+	private int level = 0; // The level of the jabberpoint.slide_components.SlideItem
 
 	public SlideItem(int lev) {
 		level = lev;

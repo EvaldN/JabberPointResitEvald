@@ -1,3 +1,7 @@
+package jabberpoint.slide_components;
+
+import jabberpoint.text_items.TextItem;
+
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
@@ -26,7 +30,7 @@ public class Slide {
 		items = new Vector<SlideItem>();
 	}
 
-	// Add a SlideItem
+	// Add a jabberpoint.slide_components.SlideItem
 	public void append(SlideItem anItem) {
 		items.addElement(anItem);
 	}
@@ -41,12 +45,12 @@ public class Slide {
 		title = newTitle;
 	}
 
-	// Create a TextItem out of a String and add the TextItem
+	// Create a jabberpoint.text_items.TextItem out of a String and add the jabberpoint.text_items.TextItem
 	public void append(int level, String message) {
 		append(new TextItem(level, message));
 	}
 
-	// Returns the SlideItem
+	// Returns the jabberpoint.slide_components.SlideItem
 	public SlideItem getSlideItem(int number) {
 		return (SlideItem) items.elementAt(number);
 	}

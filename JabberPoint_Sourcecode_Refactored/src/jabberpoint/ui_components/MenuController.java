@@ -1,3 +1,8 @@
+package jabberpoint.ui_components;
+
+import jabberpoint.presentation_parsing.Accessor;
+import jabberpoint.presentation_parsing.XMLAccessor;
+
 import java.awt.MenuBar;
 import java.awt.Frame;
 import java.awt.Menu;

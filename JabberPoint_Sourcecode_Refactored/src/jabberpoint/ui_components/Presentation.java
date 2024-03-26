@@ -1,3 +1,8 @@
+package jabberpoint.ui_components;
+
+import jabberpoint.slide_components.Slide;
+import jabberpoint.slide_components.SlideViewerComponent;
+
 import java.util.ArrayList;
 
 /**

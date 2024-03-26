@@ -1,3 +1,8 @@
+package jabberpoint.slide_components;
+
+import jabberpoint.text_items.LabelFont;
+import jabberpoint.ui_components.Presentation;
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Dimension;
@@ -7,7 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 /**
- * <p>SlideViewerComponent is a graphical component that can display Slides.</p>
+ * <p>jabberpoint.slide_components.SlideViewerComponent is a graphical component that can display Slides.</p>
  *
  * @author Ian F. Darwin
  * @author Gert Florijn

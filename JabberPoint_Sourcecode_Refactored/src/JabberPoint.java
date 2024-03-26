@@ -1,3 +1,7 @@
+import jabberpoint.presentation_parsing.*;
+import jabberpoint.slide_components.*;
+import jabberpoint.ui_components.*;
+
 import javax.swing.JOptionPane;
 import java.io.IOException;
 

@@ -1,7 +1,11 @@
+package jabberpoint.presentation_parsing;
+
+import jabberpoint.ui_components.Presentation;
+
 import java.io.IOException;
 
 /**
- * <p>An Accessor makes it possible to read and write data
+ * <p>An jabberpoint.presentation_parsing.Accessor makes it possible to read and write data
  * for a presentation.</p>
  * <p>Non-abstract subclasses should implement the load and save methods.</p>
  *

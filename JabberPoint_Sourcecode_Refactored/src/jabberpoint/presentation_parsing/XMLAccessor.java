@@ -1,3 +1,5 @@
+package jabberpoint.presentation_parsing;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -8,14 +10,19 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import jabberpoint.text_items.TextItem;
+import jabberpoint.ui_components.BitmapItem;
+import jabberpoint.ui_components.Presentation;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jabberpoint.slide_components.*;
+
 /**
- * XMLAccessor, reads and writes XML files
+ * jabberpoint.presentation_parsing.XMLAccessor, reads and writes XML files
  *
  * @author Ian F. Darwin
  * @author Gert Florijn
@@ -127,6 +134,11 @@ public class XMLAccessor extends Accessor {
 	}
 
 	private void saveSlides(Presentation presentation, PrintWriter out) {
+		if(presentation.getSize() == 0) {
+			out.println("<slide>");
+			out.println("<title> </title>");
+			out.println("</slide>");
+		}
 		for (int slideNumber = 0; slideNumber < presentation.getSize(); slideNumber++) {
 			Slide slide = presentation.getSlide(slideNumber);
 			out.println("<slide>");
@@ -134,6 +146,7 @@ public class XMLAccessor extends Accessor {
 			saveSlideItems(slide, out);
 			out.println("</slide>");
 		}
+
 	}
 
 	private void saveSlideItems(Slide slide, PrintWriter out) {

@@ -1,3 +1,8 @@
+package jabberpoint.ui_components;
+
+import jabberpoint.slide_components.SlideItem;
+import jabberpoint.slide_components.Style;
+
 import java.awt.Rectangle;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
